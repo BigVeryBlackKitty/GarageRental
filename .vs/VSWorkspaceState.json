@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\database",
+    "\\frames"
   ],
+  "SelectedNode": "\\frames\\CloseAgreementFrame.cpp",
   "PreviewInSolutionExplorer": false
 }

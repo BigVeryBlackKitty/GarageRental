@@ -16,117 +16,141 @@
 #include "frames/GarageFinanceFrame.h"
 #include "frames/GarageRatingFrame.h"
 #include "frames/ReturnRateFrame.h"
+#include "frames/BackupSchedulerFrame.h"
 #include <wx/msgdlg.h>
+#include <wx/file.h>
+#include <wx/filedlg.h>
 
 MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title,
-                     const wxPoint& pos, const wxSize& size, long style)
+    const wxPoint& pos, const wxSize& size, long style)
     : wxFrame(parent, id, title, pos, size, style), m_db(nullptr) {
 
     // ─── Menu bar ───────────────────────────────────────────────
     m_menubar5 = new wxMenuBar();
 
-    // Assign explicit unique IDs to avoid wxIsStockID assertion
-    int idLoadData    = wxNewId();
-    int idSaveData    = wxNewId();
-    int idBackup      = wxNewId();
-    int idOccupancy   = wxNewId();
-    int idFinance     = wxNewId();
-    int idRating      = wxNewId();
-    int idDebtors     = wxNewId();
-    int idReturn      = wxNewId();
-    int idLog         = wxNewId();
-    int idHelp        = wxNewId();
-    int idAbout       = wxNewId();
+    // Уникальные ID для пунктов меню
+    int idLoadData = wxNewId();
+    int idSaveData = wxNewId();
+    int idBackup = wxNewId();
+    int idBackupSettings = wxNewId();
+    int idRestoreBackup = wxNewId();
+    int idExportData = wxNewId();
+    int idImportData = wxNewId();
+    int idOccupancy = wxNewId();
+    int idFinance = wxNewId();
+    int idRating = wxNewId();
+    int idDebtors = wxNewId();
+    int idReturn = wxNewId();
+    int idLog = wxNewId();
+    int idHelp = wxNewId();
+    int idAbout = wxNewId();
 
+    // Меню "База данных"
     Database = new wxMenu();
     Database->Append(idLoadData, wxT("Загрузить данные"));
     Database->Append(idSaveData, wxT("Сохранить данные"));
     Database->AppendSeparator();
-    Database->Append(idBackup,   wxT("Резервная копия"));
+    Database->Append(idBackup, wxT("Создать резервную копию"));
+    Database->Append(idBackupSettings, wxT("Настройка автокопирования"));
+    Database->Append(idRestoreBackup, wxT("Восстановить из копии"));
+    Database->AppendSeparator();
+    Database->Append(idExportData, wxT("Экспорт данных (SQL)"));
+    Database->Append(idImportData, wxT("Импорт данных (SQL)"));
     m_menubar5->Append(Database, wxT("База данных"));
 
+    // Меню "Отчёты"
     report = new wxMenu();
     report->Append(idOccupancy, wxT("Занятость гаражей"));
-    report->Append(idFinance,   wxT("Финансы по гаражам"));
-    report->Append(idRating,    wxT("Рейтинг гаражей"));
+    report->Append(idFinance, wxT("Финансы по гаражам"));
+    report->Append(idRating, wxT("Рейтинг гаражей"));
     report->AppendSeparator();
-    report->Append(idDebtors,   wxT("Должники"));
-    report->Append(idReturn,    wxT("Возврат средств"));
+    report->Append(idDebtors, wxT("Должники"));
+    report->Append(idReturn, wxT("Возврат средств"));
     m_menubar5->Append(report, wxT("Отчёты"));
 
+    // Меню "Сервис"
     Service = new wxMenu();
     Service->Append(idLog, wxT("Журнал событий"));
     m_menubar5->Append(Service, wxT("Сервис"));
 
+    // Меню "Справка"
     Reference = new wxMenu();
-    Reference->Append(idHelp,  wxT("Справка"));
+    Reference->Append(idHelp, wxT("Справка"));
     Reference->Append(idAbout, wxT("О программе"));
     m_menubar5->Append(Reference, wxT("Справка"));
 
     SetMenuBar(m_menubar5);
 
+    // ─── Привязка событий меню ─────────────────────────────────────
+    Bind(wxEVT_MENU, &MainFrame::OnLoadData, this, idLoadData);
+    Bind(wxEVT_MENU, &MainFrame::OnSaveData, this, idSaveData);
+    Bind(wxEVT_MENU, &MainFrame::OnBackup, this, idBackup);
+    Bind(wxEVT_MENU, &MainFrame::OnBackupSettings, this, idBackupSettings);
+    Bind(wxEVT_MENU, &MainFrame::OnRestoreBackup, this, idRestoreBackup);
+    Bind(wxEVT_MENU, &MainFrame::OnExportData, this, idExportData);
+    Bind(wxEVT_MENU, &MainFrame::OnImportData, this, idImportData);
+    Bind(wxEVT_MENU, &MainFrame::OnGarageOccupancyReport, this, idOccupancy);
+    Bind(wxEVT_MENU, &MainFrame::OnGarageFinanceReport, this, idFinance);
+    Bind(wxEVT_MENU, &MainFrame::OnGarageRatingReport, this, idRating);
+    Bind(wxEVT_MENU, &MainFrame::OnDebtorsReport, this, idDebtors);
+    Bind(wxEVT_MENU, &MainFrame::OnReturnRateReport, this, idReturn);
+    Bind(wxEVT_MENU, &MainFrame::OnLogView, this, idLog);
+    Bind(wxEVT_MENU, &MainFrame::OnHelp, this, idHelp);
+    Bind(wxEVT_MENU, &MainFrame::OnAbout, this, idAbout);
+
     // ─── Main layout ─────────────────────────────────────────────
     wxBoxSizer* rootSizer = new wxBoxSizer(wxVERTICAL);
-
     wxBoxSizer* rowSizer = new wxBoxSizer(wxHORIZONTAL);
 
-    // ── Clients block ──────────────────────────────────────────
+    // ── Арендаторы ───────────────────────────────────────────────
     wxStaticBoxSizer* clientBox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Арендаторы"));
-
-    m_button45  = new wxButton(clientBox->GetStaticBox(), wxID_ANY, wxT("Добавить"));
-    m_button20  = new wxButton(clientBox->GetStaticBox(), wxID_ANY, wxT("Редактировать"));
-    m_button21  = new wxButton(clientBox->GetStaticBox(), wxID_ANY, wxT("Информация"));
-    m_button22  = new wxButton(clientBox->GetStaticBox(), wxID_ANY, wxT("Все арендаторы"));
-
-    clientBox->Add(m_button45,  0, wxEXPAND | wxALL, 4);
-    clientBox->Add(m_button20,  0, wxEXPAND | wxALL, 4);
-    clientBox->Add(m_button21,  0, wxEXPAND | wxALL, 4);
-    clientBox->Add(m_button22,  0, wxEXPAND | wxALL, 4);
+    m_button45 = new wxButton(clientBox->GetStaticBox(), wxID_ANY, wxT("Добавить"));
+    m_button20 = new wxButton(clientBox->GetStaticBox(), wxID_ANY, wxT("Редактировать"));
+    m_button21 = new wxButton(clientBox->GetStaticBox(), wxID_ANY, wxT("Информация"));
+    m_button22 = new wxButton(clientBox->GetStaticBox(), wxID_ANY, wxT("Все арендаторы"));
+    clientBox->Add(m_button45, 0, wxEXPAND | wxALL, 4);
+    clientBox->Add(m_button20, 0, wxEXPAND | wxALL, 4);
+    clientBox->Add(m_button21, 0, wxEXPAND | wxALL, 4);
+    clientBox->Add(m_button22, 0, wxEXPAND | wxALL, 4);
     rowSizer->Add(clientBox, 1, wxEXPAND | wxALL, 8);
 
-    // ── Agreements block ───────────────────────────────────────
+    // ── Договоры аренды ───────────────────────────────────────────
     wxStaticBoxSizer* dogovorBox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Договоры аренды"));
-
-    m_button19          = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Новый договор"));
-    m_button38          = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Продлить договор"));
-    m_button23          = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Редактировать"));
-    m_button24          = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Все договоры"));
-    m_button31          = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Информация"));
+    m_button19 = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Новый договор"));
+    m_button38 = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Продлить договор"));
+    m_button23 = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Редактировать"));
+    m_button24 = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Все договоры"));
+    m_button31 = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Информация"));
     m_buttonCloseRental = new wxButton(dogovorBox->GetStaticBox(), wxID_ANY, wxT("Закончить аренду"));
-
-    dogovorBox->Add(m_button19,          0, wxEXPAND | wxALL, 4);
-    dogovorBox->Add(m_button38,          0, wxEXPAND | wxALL, 4);
-    dogovorBox->Add(m_button23,          0, wxEXPAND | wxALL, 4);
-    dogovorBox->Add(m_button24,          0, wxEXPAND | wxALL, 4);
-    dogovorBox->Add(m_button31,          0, wxEXPAND | wxALL, 4);
+    dogovorBox->Add(m_button19, 0, wxEXPAND | wxALL, 4);
+    dogovorBox->Add(m_button38, 0, wxEXPAND | wxALL, 4);
+    dogovorBox->Add(m_button23, 0, wxEXPAND | wxALL, 4);
+    dogovorBox->Add(m_button24, 0, wxEXPAND | wxALL, 4);
+    dogovorBox->Add(m_button31, 0, wxEXPAND | wxALL, 4);
     dogovorBox->Add(m_buttonCloseRental, 0, wxEXPAND | wxALL, 4);
     rowSizer->Add(dogovorBox, 1, wxEXPAND | wxALL, 8);
 
-    // ── Garages block ──────────────────────────────────────────
+    // ── Гаражи ────────────────────────────────────────────────────
     wxStaticBoxSizer* garageBox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Гаражи"));
-
-    m_button27  = new wxButton(garageBox->GetStaticBox(), wxID_ANY, wxT("Добавить гараж"));
-    m_button28  = new wxButton(garageBox->GetStaticBox(), wxID_ANY, wxT("Удалить гараж"));
+    m_button27 = new wxButton(garageBox->GetStaticBox(), wxID_ANY, wxT("Добавить гараж"));
+    m_button28 = new wxButton(garageBox->GetStaticBox(), wxID_ANY, wxT("Удалить гараж"));
     m_button281 = new wxButton(garageBox->GetStaticBox(), wxID_ANY, wxT("Редактировать"));
-    m_button29  = new wxButton(garageBox->GetStaticBox(), wxID_ANY, wxT("Все гаражи"));
-    m_button30  = new wxButton(garageBox->GetStaticBox(), wxID_ANY, wxT("Информация"));
-
-    garageBox->Add(m_button27,  0, wxEXPAND | wxALL, 4);
-    garageBox->Add(m_button28,  0, wxEXPAND | wxALL, 4);
+    m_button29 = new wxButton(garageBox->GetStaticBox(), wxID_ANY, wxT("Все гаражи"));
+    m_button30 = new wxButton(garageBox->GetStaticBox(), wxID_ANY, wxT("Информация"));
+    garageBox->Add(m_button27, 0, wxEXPAND | wxALL, 4);
+    garageBox->Add(m_button28, 0, wxEXPAND | wxALL, 4);
     garageBox->Add(m_button281, 0, wxEXPAND | wxALL, 4);
-    garageBox->Add(m_button29,  0, wxEXPAND | wxALL, 4);
-    garageBox->Add(m_button30,  0, wxEXPAND | wxALL, 4);
+    garageBox->Add(m_button29, 0, wxEXPAND | wxALL, 4);
+    garageBox->Add(m_button30, 0, wxEXPAND | wxALL, 4);
     rowSizer->Add(garageBox, 1, wxEXPAND | wxALL, 8);
 
-    // ── Payments block ─────────────────────────────────────────
+    // ── Оплаты ────────────────────────────────────────────────────
     wxStaticBoxSizer* payBox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Оплаты"));
-
     m_button32 = new wxButton(payBox->GetStaticBox(), wxID_ANY, wxT("Принять оплату"));
     m_button36 = new wxButton(payBox->GetStaticBox(), wxID_ANY, wxT("Редактировать"));
     m_button33 = new wxButton(payBox->GetStaticBox(), wxID_ANY, wxT("История оплат"));
     m_button35 = new wxButton(payBox->GetStaticBox(), wxID_ANY, wxT("Все оплаты"));
     m_button34 = new wxButton(payBox->GetStaticBox(), wxID_ANY, wxT("Возврат средств"));
-
     payBox->Add(m_button32, 0, wxEXPAND | wxALL, 4);
     payBox->Add(m_button36, 0, wxEXPAND | wxALL, 4);
     payBox->Add(m_button33, 0, wxEXPAND | wxALL, 4);
@@ -136,48 +160,39 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 
     rootSizer->Add(rowSizer, 1, wxEXPAND);
     SetSizer(rootSizer);
-    SetMinSize(wxSize(800, 320));
+    SetMinSize(wxSize(900, 400));
 
-    // ─── Button events ───────────────────────────────────────────
-    m_button45->Bind(wxEVT_BUTTON,  &MainFrame::OnAddTenant,      this);
-    m_button20->Bind(wxEVT_BUTTON,  &MainFrame::OnEditTenant,     this);
-    m_button21->Bind(wxEVT_BUTTON,  &MainFrame::OnTenantInfo,     this);
-    m_button22->Bind(wxEVT_BUTTON,  &MainFrame::OnAllTenants,     this);
+    // ─── Привязка событий кнопок ──────────────────────────────────
+    m_button45->Bind(wxEVT_BUTTON, &MainFrame::OnAddTenant, this);
+    m_button20->Bind(wxEVT_BUTTON, &MainFrame::OnEditTenant, this);
+    m_button21->Bind(wxEVT_BUTTON, &MainFrame::OnTenantInfo, this);
+    m_button22->Bind(wxEVT_BUTTON, &MainFrame::OnAllTenants, this);
 
-    m_button19->Bind(wxEVT_BUTTON,          &MainFrame::OnNewAgreement,   this);
-    m_button38->Bind(wxEVT_BUTTON,          &MainFrame::OnExtendAgreement,this);
-    m_button23->Bind(wxEVT_BUTTON,          &MainFrame::OnEditAgreement,  this);
-    m_button24->Bind(wxEVT_BUTTON,          &MainFrame::OnAllAgreements,  this);
-    m_button31->Bind(wxEVT_BUTTON,          &MainFrame::OnAgreementInfo,  this);
-    m_buttonCloseRental->Bind(wxEVT_BUTTON, &MainFrame::OnCloseRental,    this);
+    m_button19->Bind(wxEVT_BUTTON, &MainFrame::OnNewAgreement, this);
+    m_button38->Bind(wxEVT_BUTTON, &MainFrame::OnExtendAgreement, this);
+    m_button23->Bind(wxEVT_BUTTON, &MainFrame::OnEditAgreement, this);
+    m_button24->Bind(wxEVT_BUTTON, &MainFrame::OnAllAgreements, this);
+    m_button31->Bind(wxEVT_BUTTON, &MainFrame::OnAgreementInfo, this);
+    m_buttonCloseRental->Bind(wxEVT_BUTTON, &MainFrame::OnCloseRental, this);
 
-    m_button27->Bind(wxEVT_BUTTON,  &MainFrame::OnAddGarage,      this);
-    m_button28->Bind(wxEVT_BUTTON,  &MainFrame::OnDeleteGarage,   this);
-    m_button281->Bind(wxEVT_BUTTON, &MainFrame::OnEditGarage,     this);
-    m_button29->Bind(wxEVT_BUTTON,  &MainFrame::OnAllGarages,     this);
-    m_button30->Bind(wxEVT_BUTTON,  &MainFrame::OnGarageInfo,     this);
+    m_button27->Bind(wxEVT_BUTTON, &MainFrame::OnAddGarage, this);
+    m_button28->Bind(wxEVT_BUTTON, &MainFrame::OnDeleteGarage, this);
+    m_button281->Bind(wxEVT_BUTTON, &MainFrame::OnEditGarage, this);
+    m_button29->Bind(wxEVT_BUTTON, &MainFrame::OnAllGarages, this);
+    m_button30->Bind(wxEVT_BUTTON, &MainFrame::OnGarageInfo, this);
 
-    m_button32->Bind(wxEVT_BUTTON,  &MainFrame::OnAddPayment,     this);
-    m_button36->Bind(wxEVT_BUTTON,  &MainFrame::OnEditPayment,    this);
-    m_button33->Bind(wxEVT_BUTTON,  &MainFrame::OnPaymentHistory, this);
-    m_button35->Bind(wxEVT_BUTTON,  &MainFrame::OnAllPayments,    this);
-    m_button34->Bind(wxEVT_BUTTON,  &MainFrame::OnRefundPayment,  this);
-
-    // ─── Menu events ─────────────────────────────────────────────
-    Bind(wxEVT_MENU, &MainFrame::OnLoadData,              this, idLoadData);
-    Bind(wxEVT_MENU, &MainFrame::OnSaveData,              this, idSaveData);
-    Bind(wxEVT_MENU, &MainFrame::OnBackup,                this, idBackup);
-    Bind(wxEVT_MENU, &MainFrame::OnGarageOccupancyReport, this, idOccupancy);
-    Bind(wxEVT_MENU, &MainFrame::OnGarageFinanceReport,   this, idFinance);
-    Bind(wxEVT_MENU, &MainFrame::OnGarageRatingReport,    this, idRating);
-    Bind(wxEVT_MENU, &MainFrame::OnDebtorsReport,         this, idDebtors);
-    Bind(wxEVT_MENU, &MainFrame::OnReturnRateReport,      this, idReturn);
-    Bind(wxEVT_MENU, &MainFrame::OnLogView,               this, idLog);
-    Bind(wxEVT_MENU, &MainFrame::OnHelp,                  this, idHelp);
-    Bind(wxEVT_MENU, &MainFrame::OnAbout,                 this, idAbout);
+    m_button32->Bind(wxEVT_BUTTON, &MainFrame::OnAddPayment, this);
+    m_button36->Bind(wxEVT_BUTTON, &MainFrame::OnEditPayment, this);
+    m_button33->Bind(wxEVT_BUTTON, &MainFrame::OnPaymentHistory, this);
+    m_button35->Bind(wxEVT_BUTTON, &MainFrame::OnAllPayments, this);
+    m_button34->Bind(wxEVT_BUTTON, &MainFrame::OnRefundPayment, this);
 }
 
-// ========== Clients ==========
+MainFrame::~MainFrame() {}
+
+// ==================== Обработчики кнопок ====================
+
+// ----- Арендаторы -----
 void MainFrame::OnAddTenant(wxCommandEvent& event) {
     TenantEditFrame* frame = new TenantEditFrame(this, m_db, -1);
     frame->Show();
@@ -200,7 +215,10 @@ void MainFrame::OnEditTenant(wxCommandEvent& event) {
             sqlite3_finalize(stmt);
         }
     }
-    if (choices.IsEmpty()) { wxMessageBox(wxT("Нет арендаторов"), wxT("Информация"), wxOK | wxICON_INFORMATION); return; }
+    if (choices.IsEmpty()) {
+        wxMessageBox(wxT("Нет арендаторов"), wxT("Информация"), wxOK | wxICON_INFORMATION);
+        return;
+    }
     wxSingleChoiceDialog dlg(this, wxT("Выберите арендатора:"), wxT("Редактирование"), choices);
     if (dlg.ShowModal() == wxID_OK) {
         int tenantId = wxAtoi(choices[dlg.GetSelection()].BeforeFirst(' '));
@@ -219,7 +237,7 @@ void MainFrame::OnAllTenants(wxCommandEvent& event) {
     frame->Show();
 }
 
-// ========== Agreements ==========
+// ----- Договоры -----
 void MainFrame::OnNewAgreement(wxCommandEvent& event) {
     NewAgreementFrame* frame = new NewAgreementFrame(this, m_db);
     frame->Show();
@@ -227,7 +245,7 @@ void MainFrame::OnNewAgreement(wxCommandEvent& event) {
 
 void MainFrame::OnExtendAgreement(wxCommandEvent& event) {
     wxMessageBox(wxT("Для продления откройте список договоров и выберите нужный."),
-                 wxT("Продление договора"), wxOK | wxICON_INFORMATION);
+        wxT("Продление договора"), wxOK | wxICON_INFORMATION);
     AllAgreementsFrame* frame = new AllAgreementsFrame(this, m_db);
     frame->Show();
 }
@@ -252,7 +270,7 @@ void MainFrame::OnCloseRental(wxCommandEvent& event) {
     frame->Show();
 }
 
-// ========== Garages ==========
+// ----- Гаражи -----
 void MainFrame::OnAddGarage(wxCommandEvent& event) {
     GarageEditFrame* frame = new GarageEditFrame(this, m_db, -1);
     frame->Show();
@@ -274,7 +292,10 @@ void MainFrame::OnDeleteGarage(wxCommandEvent& event) {
             sqlite3_finalize(stmt);
         }
     }
-    if (choices.IsEmpty()) { wxMessageBox(wxT("Нет гаражей"), wxT("Информация"), wxOK | wxICON_INFORMATION); return; }
+    if (choices.IsEmpty()) {
+        wxMessageBox(wxT("Нет гаражей"), wxT("Информация"), wxOK | wxICON_INFORMATION);
+        return;
+    }
     wxSingleChoiceDialog dlg(this, wxT("Выберите гараж для удаления:"), wxT("Удаление"), choices);
     if (dlg.ShowModal() == wxID_OK) {
         int garageId = wxAtoi(choices[dlg.GetSelection()].BeforeFirst(' '));
@@ -303,7 +324,10 @@ void MainFrame::OnEditGarage(wxCommandEvent& event) {
             sqlite3_finalize(stmt);
         }
     }
-    if (choices.IsEmpty()) { wxMessageBox(wxT("Нет гаражей"), wxT("Информация"), wxOK | wxICON_INFORMATION); return; }
+    if (choices.IsEmpty()) {
+        wxMessageBox(wxT("Нет гаражей"), wxT("Информация"), wxOK | wxICON_INFORMATION);
+        return;
+    }
     wxSingleChoiceDialog dlg(this, wxT("Выберите гараж:"), wxT("Редактирование"), choices);
     if (dlg.ShowModal() == wxID_OK) {
         int garageId = wxAtoi(choices[dlg.GetSelection()].BeforeFirst(' '));
@@ -322,7 +346,7 @@ void MainFrame::OnGarageInfo(wxCommandEvent& event) {
     frame->Show();
 }
 
-// ========== Payments ==========
+// ----- Оплаты -----
 void MainFrame::OnAddPayment(wxCommandEvent& event) {
     PaymentFrame* frame = new PaymentFrame(this, m_db);
     frame->Show();
@@ -347,17 +371,128 @@ void MainFrame::OnRefundPayment(wxCommandEvent& event) {
     wxMessageBox(wxT("Функция возврата средств в разработке."), wxT("Возврат"), wxOK | wxICON_INFORMATION);
 }
 
-// ========== Menu ==========
+// ==================== Обработчики меню ====================
+
 void MainFrame::OnLoadData(wxCommandEvent& event) {
-    wxMessageBox(wxT("Загрузка данных выполняется автоматически при старте."), wxT("База данных"), wxOK | wxICON_INFORMATION);
+    if (!m_db || !m_db->IsConnected()) {
+        wxMessageBox(wxT("База данных не подключена"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+        return;
+    }
+    if (m_db->LoadData()) {
+        wxMessageBox(wxT("Проверка целостности базы данных выполнена успешно"),
+            wxT("Загрузка"), wxOK | wxICON_INFORMATION);
+    }
+    else {
+        wxMessageBox(wxT("Обнаружены проблемы с базой данных"),
+            wxT("Ошибка"), wxOK | wxICON_ERROR);
+    }
 }
 
 void MainFrame::OnSaveData(wxCommandEvent& event) {
-    wxMessageBox(wxT("Данные сохраняются автоматически."), wxT("База данных"), wxOK | wxICON_INFORMATION);
+    if (!m_db || !m_db->IsConnected()) {
+        wxMessageBox(wxT("База данных не подключена"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+        return;
+    }
+    if (m_db->SaveData()) {
+        wxMessageBox(wxT("Данные сохранены"), wxT("Успех"), wxOK | wxICON_INFORMATION);
+    }
+    else {
+        wxMessageBox(wxT("Ошибка при сохранении"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+    }
 }
 
 void MainFrame::OnBackup(wxCommandEvent& event) {
-    wxMessageBox(wxT("Резервная копия: скопируйте файл garage_rental.db."), wxT("Резервная копия"), wxOK | wxICON_INFORMATION);
+    if (!m_db || !m_db->IsConnected()) {
+        wxMessageBox(wxT("База данных не подключена"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+        return;
+    }
+
+    wxFileDialog dlg(this, wxT("Сохранить резервную копию"), wxGetCwd(),
+        wxString::Format(wxT("backup_%s.db"), wxDateTime::Now().Format(wxT("%Y%m%d_%H%M%S"))),
+        wxT("Базы данных (*.db)|*.db"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+    if (dlg.ShowModal() == wxID_OK) {
+        if (m_db->Backup(dlg.GetPath())) {
+            wxMessageBox(wxT("Резервная копия создана!"), wxT("Успех"), wxOK | wxICON_INFORMATION);
+        }
+        else {
+            wxMessageBox(wxT("Ошибка при создании копии"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+        }
+    }
+}
+
+void MainFrame::OnBackupSettings(wxCommandEvent& event) {
+    if (!m_db || !m_db->IsConnected()) {
+        wxMessageBox(wxT("База данных не подключена"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+        return;
+    }
+    BackupSchedulerFrame* frame = new BackupSchedulerFrame(this, m_db);
+    frame->Show();
+}
+
+void MainFrame::OnRestoreBackup(wxCommandEvent& event) {
+    if (!m_db || !m_db->IsConnected()) {
+        wxMessageBox(wxT("База данных не подключена"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+        return;
+    }
+
+    wxFileDialog dlg(this, wxT("Выберите файл резервной копии"), wxGetCwd(),
+        wxT(""), wxT("Базы данных (*.db)|*.db"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+    if (dlg.ShowModal() == wxID_OK) {
+        if (wxMessageBox(wxT("Восстановление заменит текущую базу данных!\nПродолжить?"),
+            wxT("Подтверждение"), wxYES_NO | wxICON_WARNING) == wxYES) {
+            if (m_db->RestoreFromBackup(dlg.GetPath())) {
+                wxMessageBox(wxT("База данных восстановлена!\nПерезапустите программу."),
+                    wxT("Успех"), wxOK | wxICON_INFORMATION);
+            }
+            else {
+                wxMessageBox(wxT("Ошибка при восстановлении"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+            }
+        }
+    }
+}
+
+void MainFrame::OnExportData(wxCommandEvent& event) {
+    if (!m_db || !m_db->IsConnected()) {
+        wxMessageBox(wxT("База данных не подключена"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+        return;
+    }
+
+    wxFileDialog dlg(this, wxT("Сохранить экспорт"), wxGetCwd(),
+        wxT("data_export.sql"), wxT("SQL файлы (*.sql)|*.sql"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+    if (dlg.ShowModal() == wxID_OK) {
+        if (m_db->ExportData(dlg.GetPath())) {
+            wxMessageBox(wxT("Данные экспортированы!"), wxT("Успех"), wxOK | wxICON_INFORMATION);
+        }
+        else {
+            wxMessageBox(wxT("Ошибка при экспорте"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+        }
+    }
+}
+
+void MainFrame::OnImportData(wxCommandEvent& event) {
+    if (!m_db || !m_db->IsConnected()) {
+        wxMessageBox(wxT("База данных не подключена"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+        return;
+    }
+
+    wxFileDialog dlg(this, wxT("Выберите файл для импорта"), wxGetCwd(),
+        wxT(""), wxT("SQL файлы (*.sql)|*.sql"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+    if (dlg.ShowModal() == wxID_OK) {
+        if (wxMessageBox(wxT("Импорт заменит текущие данные!\nПродолжить?"),
+            wxT("Подтверждение"), wxYES_NO | wxICON_WARNING) == wxYES) {
+            if (m_db->ImportData(dlg.GetPath())) {
+                wxMessageBox(wxT("Данные импортированы!\nПерезапустите программу."),
+                    wxT("Успех"), wxOK | wxICON_INFORMATION);
+            }
+            else {
+                wxMessageBox(wxT("Ошибка при импорте"), wxT("Ошибка"), wxOK | wxICON_ERROR);
+            }
+        }
+    }
 }
 
 void MainFrame::OnGarageOccupancyReport(wxCommandEvent& event) {
@@ -392,20 +527,27 @@ void MainFrame::OnLogView(wxCommandEvent& event) {
 void MainFrame::OnHelp(wxCommandEvent& event) {
     wxMessageBox(
         wxT("Руководство пользователя:\n\n")
-        "1. Арендаторы — добавление и управление клиентами\n"
-        "2. Договоры — создание и контроль договоров аренды\n"
-        "3. Гаражи — управление гаражным фондом\n"
-        "4. Оплаты — приём и учёт платежей\n"
-        "5. Отчёты доступны через меню «Отчёты»",
+        wxT("1. Арендаторы — добавление и управление клиентами\n")
+        wxT("2. Договоры — создание и контроль договоров аренды\n")
+        wxT("3. Гаражи — управление гаражным фондом\n")
+        wxT("4. Оплаты — приём и учёт платежей\n")
+        wxT("5. Отчёты доступны через меню «Отчёты»\n")
+        wxT("6. Резервное копирование — меню «База данных»"),
         wxT("Справка"), wxOK | wxICON_INFORMATION);
 }
 
 void MainFrame::OnAbout(wxCommandEvent& event) {
     wxMessageBox(
         wxT("Система управления арендой гаражей\n")
-        wxT("Версия 1.0\n\n")
-        wxT("Разработано с использованием wxWidgets и SQLite"),
+        wxT("Версия 2.0\n\n")
+        wxT("Разработано с использованием:\n")
+        wxT("- wxWidgets\n")
+        wxT("- SQLite\n\n")
+        wxT("Функции:\n")
+        wxT("- Управление арендаторами и гаражами\n")
+        wxT("- Заключение и контроль договоров\n")
+        wxT("- Приём платежей\n")
+        wxT("- Отчёты и аналитика\n")
+        wxT("- Автоматическое резервное копирование"),
         wxT("О программе"), wxOK | wxICON_INFORMATION);
 }
-
-MainFrame::~MainFrame() {}
