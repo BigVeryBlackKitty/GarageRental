@@ -1,0 +1,73 @@
+[1/2] "C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -E chdir "../../x64-windows-dbg" "C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" "C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/blds/zlib/src/v1.3.1-2e5db616bf.clean" "-G" "Ninja" "-DCMAKE_BUILD_TYPE=Debug" "-DCMAKE_INSTALL_PREFIX=C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/pkgs/zlib_x64-windows/debug" "-DFETCHCONTENT_FULLY_DISCONNECTED=ON" "-DSKIP_INSTALL_FILES=ON" "-DZLIB_BUILD_EXAMPLES=OFF" "-DCMAKE_MAKE_PROGRAM=C:/Users/Пользователь/AppData/Local/vcpkg/downloads/tools/ninja/1.13.1-windows/ninja.exe" "-DBUILD_SHARED_LIBS=ON" "-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/toolchains/windows.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows" "-DVCPKG_SET_CHARSET_FLAG=ON" "-DVCPKG_PLATFORM_TOOLSET=v145" "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON" "-DCMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP=TRUE" "-DCMAKE_VERBOSE_MAKEFILE=ON" "-DVCPKG_APPLOCAL_DEPS=OFF" "-DCMAKE_TOOLCHAIN_FILE=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake" "-DCMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION=ON" "-DVCPKG_CXX_FLAGS=" "-DVCPKG_CXX_FLAGS_RELEASE=" "-DVCPKG_CXX_FLAGS_DEBUG=" "-DVCPKG_C_FLAGS=" "-DVCPKG_C_FLAGS_RELEASE=" "-DVCPKG_C_FLAGS_DEBUG=" "-DVCPKG_CRT_LINKAGE=dynamic" "-DVCPKG_LINKER_FLAGS=" "-DVCPKG_LINKER_FLAGS_RELEASE=" "-DVCPKG_LINKER_FLAGS_DEBUG=" "-DVCPKG_TARGET_ARCHITECTURE=x64" "-DCMAKE_INSTALL_LIBDIR:STRING=lib" "-DCMAKE_INSTALL_BINDIR:STRING=bin" "-D_VCPKG_ROOT_DIR=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg" "-D_VCPKG_INSTALLED_DIR=C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed" "-DVCPKG_MANIFEST_INSTALL=OFF" "-DSKIP_INSTALL_HEADERS=ON"
+FAILED: [code=1] ../../x64-windows-dbg/CMakeCache.txt 
+"C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -E chdir "../../x64-windows-dbg" "C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" "C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/blds/zlib/src/v1.3.1-2e5db616bf.clean" "-G" "Ninja" "-DCMAKE_BUILD_TYPE=Debug" "-DCMAKE_INSTALL_PREFIX=C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/pkgs/zlib_x64-windows/debug" "-DFETCHCONTENT_FULLY_DISCONNECTED=ON" "-DSKIP_INSTALL_FILES=ON" "-DZLIB_BUILD_EXAMPLES=OFF" "-DCMAKE_MAKE_PROGRAM=C:/Users/Пользователь/AppData/Local/vcpkg/downloads/tools/ninja/1.13.1-windows/ninja.exe" "-DBUILD_SHARED_LIBS=ON" "-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/toolchains/windows.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows" "-DVCPKG_SET_CHARSET_FLAG=ON" "-DVCPKG_PLATFORM_TOOLSET=v145" "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON" "-DCMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP=TRUE" "-DCMAKE_VERBOSE_MAKEFILE=ON" "-DVCPKG_APPLOCAL_DEPS=OFF" "-DCMAKE_TOOLCHAIN_FILE=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake" "-DCMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION=ON" "-DVCPKG_CXX_FLAGS=" "-DVCPKG_CXX_FLAGS_RELEASE=" "-DVCPKG_CXX_FLAGS_DEBUG=" "-DVCPKG_C_FLAGS=" "-DVCPKG_C_FLAGS_RELEASE=" "-DVCPKG_C_FLAGS_DEBUG=" "-DVCPKG_CRT_LINKAGE=dynamic" "-DVCPKG_LINKER_FLAGS=" "-DVCPKG_LINKER_FLAGS_RELEASE=" "-DVCPKG_LINKER_FLAGS_DEBUG=" "-DVCPKG_TARGET_ARCHITECTURE=x64" "-DCMAKE_INSTALL_LIBDIR:STRING=lib" "-DCMAKE_INSTALL_BINDIR:STRING=bin" "-D_VCPKG_ROOT_DIR=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg" "-D_VCPKG_INSTALLED_DIR=C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed" "-DVCPKG_MANIFEST_INSTALL=OFF" "-DSKIP_INSTALL_HEADERS=ON"
+-- The C compiler identification is MSVC 19.50.35728.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - failed
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/cl.exe
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/cl.exe - broken
+CMake Error at C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeTestCCompiler.cmake:67 (message):
+  The C compiler
+
+    "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/cl.exe"
+
+  is not able to compile a simple test program.
+
+  It fails with the following output:
+
+    Change Dir: 'C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/blds/zlib/x64-windows-dbg/CMakeFiles/CMakeScratch/TryCompile-i5ut7n'
+    
+    Run Build Command(s): C:/Users/Пользователь/AppData/Local/vcpkg/downloads/tools/ninja/1.13.1-windows/ninja.exe -v cmTC_b62f4
+    [1/2] C:\PROGRA~1\MICROS~1\18\COMMUN~1\VC\Tools\MSVC\1450~1.357\bin\Hostx64\x64\cl.exe  /nologo -D_MBCS  /nologo /DWIN32 /D_WINDOWS /utf-8 /MP   /MDd /Z7 /Ob0 /Od /RTC1  -MDd /showIncludes /FoCMakeFiles\cmTC_b62f4.dir\testCCompiler.c.obj /FdCMakeFiles\cmTC_b62f4.dir\ /FS -c C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\x64-windows-dbg\CMakeFiles\CMakeScratch\TryCompile-i5ut7n\testCCompiler.c
+    FAILED: [code=2] CMakeFiles/cmTC_b62f4.dir/testCCompiler.c.obj 
+    C:\PROGRA~1\MICROS~1\18\COMMUN~1\VC\Tools\MSVC\1450~1.357\bin\Hostx64\x64\cl.exe  /nologo -D_MBCS  /nologo /DWIN32 /D_WINDOWS /utf-8 /MP   /MDd /Z7 /Ob0 /Od /RTC1  -MDd /showIncludes /FoCMakeFiles\cmTC_b62f4.dir\testCCompiler.c.obj /FdCMakeFiles\cmTC_b62f4.dir\ /FS -c C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\x64-windows-dbg\CMakeFiles\CMakeScratch\TryCompile-i5ut7n\testCCompiler.c
+    cl : Command line error D8050 : cannot execute 'C:\PROGRA~1\MICROS~1\18\COMMUN~1\VC\Tools\MSVC\1450~1.357\bin\Hostx64\x64\c1.dll': failed to get command line into debug records
+    ninja: build stopped: subcommand failed.
+    
+    
+
+
+
+  CMake will not be able to correctly generate this project.
+Call Stack (most recent call first):
+  CMakeLists.txt:4 (project)
+
+
+-- Configuring incomplete, errors occurred!
+[2/2] "C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -E chdir ".." "C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" "C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/blds/zlib/src/v1.3.1-2e5db616bf.clean" "-G" "Ninja" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/pkgs/zlib_x64-windows" "-DFETCHCONTENT_FULLY_DISCONNECTED=ON" "-DSKIP_INSTALL_FILES=ON" "-DZLIB_BUILD_EXAMPLES=OFF" "-DCMAKE_MAKE_PROGRAM=C:/Users/Пользователь/AppData/Local/vcpkg/downloads/tools/ninja/1.13.1-windows/ninja.exe" "-DBUILD_SHARED_LIBS=ON" "-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/toolchains/windows.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows" "-DVCPKG_SET_CHARSET_FLAG=ON" "-DVCPKG_PLATFORM_TOOLSET=v145" "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON" "-DCMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP=TRUE" "-DCMAKE_VERBOSE_MAKEFILE=ON" "-DVCPKG_APPLOCAL_DEPS=OFF" "-DCMAKE_TOOLCHAIN_FILE=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake" "-DCMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION=ON" "-DVCPKG_CXX_FLAGS=" "-DVCPKG_CXX_FLAGS_RELEASE=" "-DVCPKG_CXX_FLAGS_DEBUG=" "-DVCPKG_C_FLAGS=" "-DVCPKG_C_FLAGS_RELEASE=" "-DVCPKG_C_FLAGS_DEBUG=" "-DVCPKG_CRT_LINKAGE=dynamic" "-DVCPKG_LINKER_FLAGS=" "-DVCPKG_LINKER_FLAGS_RELEASE=" "-DVCPKG_LINKER_FLAGS_DEBUG=" "-DVCPKG_TARGET_ARCHITECTURE=x64" "-DCMAKE_INSTALL_LIBDIR:STRING=lib" "-DCMAKE_INSTALL_BINDIR:STRING=bin" "-D_VCPKG_ROOT_DIR=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg" "-D_VCPKG_INSTALLED_DIR=C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed" "-DVCPKG_MANIFEST_INSTALL=OFF"
+FAILED: [code=1] ../CMakeCache.txt 
+"C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -E chdir ".." "C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" "C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/blds/zlib/src/v1.3.1-2e5db616bf.clean" "-G" "Ninja" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/pkgs/zlib_x64-windows" "-DFETCHCONTENT_FULLY_DISCONNECTED=ON" "-DSKIP_INSTALL_FILES=ON" "-DZLIB_BUILD_EXAMPLES=OFF" "-DCMAKE_MAKE_PROGRAM=C:/Users/Пользователь/AppData/Local/vcpkg/downloads/tools/ninja/1.13.1-windows/ninja.exe" "-DBUILD_SHARED_LIBS=ON" "-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/toolchains/windows.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows" "-DVCPKG_SET_CHARSET_FLAG=ON" "-DVCPKG_PLATFORM_TOOLSET=v145" "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON" "-DCMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP=TRUE" "-DCMAKE_VERBOSE_MAKEFILE=ON" "-DVCPKG_APPLOCAL_DEPS=OFF" "-DCMAKE_TOOLCHAIN_FILE=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake" "-DCMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION=ON" "-DVCPKG_CXX_FLAGS=" "-DVCPKG_CXX_FLAGS_RELEASE=" "-DVCPKG_CXX_FLAGS_DEBUG=" "-DVCPKG_C_FLAGS=" "-DVCPKG_C_FLAGS_RELEASE=" "-DVCPKG_C_FLAGS_DEBUG=" "-DVCPKG_CRT_LINKAGE=dynamic" "-DVCPKG_LINKER_FLAGS=" "-DVCPKG_LINKER_FLAGS_RELEASE=" "-DVCPKG_LINKER_FLAGS_DEBUG=" "-DVCPKG_TARGET_ARCHITECTURE=x64" "-DCMAKE_INSTALL_LIBDIR:STRING=lib" "-DCMAKE_INSTALL_BINDIR:STRING=bin" "-D_VCPKG_ROOT_DIR=C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg" "-D_VCPKG_INSTALLED_DIR=C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed" "-DVCPKG_MANIFEST_INSTALL=OFF"
+-- The C compiler identification is MSVC 19.50.35728.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - failed
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/cl.exe
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/cl.exe - broken
+CMake Error at C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2/Modules/CMakeTestCCompiler.cmake:67 (message):
+  The C compiler
+
+    "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/cl.exe"
+
+  is not able to compile a simple test program.
+
+  It fails with the following output:
+
+    Change Dir: 'C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/blds/zlib/x64-windows-rel/CMakeFiles/CMakeScratch/TryCompile-p6ugj2'
+    
+    Run Build Command(s): C:/Users/Пользователь/AppData/Local/vcpkg/downloads/tools/ninja/1.13.1-windows/ninja.exe -v cmTC_63f25
+    [1/2] C:\PROGRA~1\MICROS~1\18\COMMUN~1\VC\Tools\MSVC\1450~1.357\bin\Hostx64\x64\cl.exe  /nologo -D_MBCS  /nologo /DWIN32 /D_WINDOWS /utf-8 /MP   /MDd /Z7 /Ob0 /Od /RTC1  -MDd /showIncludes /FoCMakeFiles\cmTC_63f25.dir\testCCompiler.c.obj /FdCMakeFiles\cmTC_63f25.dir\ /FS -c C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\x64-windows-rel\CMakeFiles\CMakeScratch\TryCompile-p6ugj2\testCCompiler.c
+    FAILED: [code=2] CMakeFiles/cmTC_63f25.dir/testCCompiler.c.obj 
+    C:\PROGRA~1\MICROS~1\18\COMMUN~1\VC\Tools\MSVC\1450~1.357\bin\Hostx64\x64\cl.exe  /nologo -D_MBCS  /nologo /DWIN32 /D_WINDOWS /utf-8 /MP   /MDd /Z7 /Ob0 /Od /RTC1  -MDd /showIncludes /FoCMakeFiles\cmTC_63f25.dir\testCCompiler.c.obj /FdCMakeFiles\cmTC_63f25.dir\ /FS -c C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\x64-windows-rel\CMakeFiles\CMakeScratch\TryCompile-p6ugj2\testCCompiler.c
+    cl : Command line error D8050 : cannot execute 'C:\PROGRA~1\MICROS~1\18\COMMUN~1\VC\Tools\MSVC\1450~1.357\bin\Hostx64\x64\c1.dll': failed to get command line into debug records
+    ninja: build stopped: subcommand failed.
+    
+    
+
+
+
+  CMake will not be able to correctly generate this project.
+Call Stack (most recent call first):
+  CMakeLists.txt:4 (project)
+
+
+-- Configuring incomplete, errors occurred!
+ninja: build stopped: subcommand failed.

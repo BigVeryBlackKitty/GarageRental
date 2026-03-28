@@ -1,0 +1,5 @@
+C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\config-x64-windows-dbg-CMakeCache.txt.log
+C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\config-x64-windows-rel-CMakeCache.txt.log
+C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\config-x64-windows-dbg-CMakeConfigureLog.yaml.log
+C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\config-x64-windows-rel-CMakeConfigureLog.yaml.log
+C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\config-x64-windows-out.log

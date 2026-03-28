@@ -1,0 +1,24 @@
+-- Using cached madler-zlib-v1.3.1.tar.gz
+-- Extracting source C:/Users/Пользователь/AppData/Local/vcpkg/downloads/madler-zlib-v1.3.1.tar.gz
+-- Applying patch 0001-Prevent-invalid-inclusions-when-HAVE_-is-set-to-0.patch
+-- Applying patch 0002-build-static-or-shared-not-both.patch
+-- Applying patch 0003-android-and-mingw-fixes.patch
+-- Using source at C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/blds/zlib/src/v1.3.1-2e5db616bf.clean
+-- Configuring x64-windows
+CMake Error at scripts/cmake/vcpkg_execute_required_process.cmake:127 (message):
+    Command failed: C:/Users/Пользователь/AppData/Local/vcpkg/downloads/tools/ninja/1.13.1-windows/ninja.exe -v
+    Working Directory: C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/vcpkg/blds/zlib/x64-windows-rel/vcpkg-parallel-configure
+    Error code: 1
+    See logs for more information:
+      C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\config-x64-windows-dbg-CMakeCache.txt.log
+      C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\config-x64-windows-rel-CMakeCache.txt.log
+      C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\config-x64-windows-dbg-CMakeConfigureLog.yaml.log
+      C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\config-x64-windows-rel-CMakeConfigureLog.yaml.log
+      C:\Users\Пользователь\Desktop\TestProject\vcpkg_installed\vcpkg\blds\zlib\config-x64-windows-out.log
+
+Call Stack (most recent call first):
+  C:/Users/Пользователь/Desktop/TestProject/vcpkg_installed/x64-windows/share/vcpkg-cmake/vcpkg_cmake_configure.cmake:269 (vcpkg_execute_required_process)
+  C:/Users/Пользователь/AppData/Local/vcpkg/registries/git-trees/3f05e04b9aededb96786a911a16193cdb711f0c9/portfile.cmake:17 (vcpkg_cmake_configure)
+  scripts/ports.cmake:206 (include)
+
+
